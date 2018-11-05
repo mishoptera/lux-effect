@@ -1,0 +1,34 @@
+---
+title: "Luxury Effect Remix"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Goal
+
+A couple years ago, some collaborators and I published a pretty cool paper that found a luxury effect for arthropod diversity in homes. Basically, houses in wealthier neighborhoods had more kinds of bugs in their homes. Here's the open access paper from [Biology Letters](http://rsbl.royalsocietypublishing.org/content/12/8/20160322).
+
+Through that paper I learned about accessing U.S. census data, and since then I've gained many more skills with moving around data. It seemed like a good exercise to revisit the script I wrote at the time to see how I can improve it and make it more usable for other people.
+
+My general plan of attack is to first use the data I made available in the supplementary files section of the original paper and dubplicate the analyese in a more reproducible format.  Then, I'm going to go a step back and reaccess the census data with the original uncleaned dataset to create a clean pipeline. Throughout the process, I'm going to also look for ways to improve on the original paper.
+
+## Original Analyses
+
+You can include R code in the document as follows:
+
+```{r cars}
+summary(cars)
+```
+
+## Better Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
