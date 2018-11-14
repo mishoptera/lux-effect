@@ -9,26 +9,20 @@
 
 # load libraries
 library(tidyverse)
-library(vegan)
-library(ggmap)
-library(ggrepel)
-library(ggpubr)
-library(stringr)
-library(acs)
 
 # load files
 aoh <- read.csv('data/7roomsFamilies.csv') 
 houses <- read.csv('data/houseEverything.csv') 
 
-
-
 # *************************************************************
 # FILTER DOWN DATASET
 # *************************************************************
-# Only need spider data. How many spider specimens per house?
-houses2 <- houses %>%
-  select(houseID, totalSpec, totalMS, totalFam, sqFeet, size, houseAge, acreage)
 
+# Pull out the necessary house variables
+houses2 <- houses %>%
+  select(houseID, totalSpec, totalMS, totalFam, sqFeet)
+
+# Calculate spiders per square meters metric
 spiders <- aoh %>%
   filter(Order == "Araneae (spiders)") %>%
   group_by(houseID) %>%
