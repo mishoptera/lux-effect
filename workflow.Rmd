@@ -33,12 +33,15 @@ load('data/aoh.Rdata')
 load('data/houses.Rdata')
 ```
 
-## Better Plots
+## Basic EDA
 
-You can also embed plots, for example:
+First let's take a look at what's in each of the files
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r initialLook, echo=FALSE}
+head(aoh)
+summary(aoh)
+head(houses)
+summary(houses)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
