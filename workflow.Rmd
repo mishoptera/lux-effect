@@ -37,11 +37,16 @@ load('data/houses.Rdata')
 
 First let's take a look at what's in each of the files
 
-```{r initialLook, echo=FALSE}
+```{r initialLookAOH, echo=FALSE}
 head(aoh)
 summary(aoh)
+```
+
+The main 'aoh' file is organized in a way such that each row is a unique arthropod family (such as Formicidae for ants or Cecidomyiidae for gall mideges) in each unique collecting event (each room in each house, such as the basement of house 23 or the 3rd bedroom in house 38). For each row there can be multiple morphospecies per family (in our case, anywhere from 1-20).
+
+```{r initialLookHOUSES}
 head(houses)
 summary(houses)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+The 'houses' file gives information on each, surprise surprise, house.  Rooms (the unique collecting events) have been collapsed to just the house level, so a conservative estimate of the number of arthropod families is listed for each house (the assumption that if there are 3 morphospecies of a given arthrpod family in one room of a house, and 10 in another, all 3 of those prior species are redundant in the the 10 in the other room). The 'houses' file also has statistics about the characteristics of each house, such as how much and how diverse the ground cover and canopy cover on the property are, the size of the house, house value, and things going on at the neighborhood scale based on remote sensing and US census data.
