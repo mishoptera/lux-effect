@@ -49,4 +49,39 @@ head(houses)
 summary(houses)
 ```
 
-The 'houses' file gives information on each, surprise surprise, house.  Rooms (the unique collecting events) have been collapsed to just the house level, so a conservative estimate of the number of arthropod families is listed for each house (the assumption that if there are 3 morphospecies of a given arthrpod family in one room of a house, and 10 in another, all 3 of those prior species are redundant in the the 10 in the other room). The 'houses' file also has statistics about the characteristics of each house, such as how much and how diverse the ground cover and canopy cover on the property are, the size of the house, house value, and things going on at the neighborhood scale based on remote sensing and US census data.
+The 'houses' file gives information on each (surprise surprise) house.  Rooms (the unique collecting events) have been collapsed to just the house level, so a conservative estimate of the number of arthropod families is listed for each house (the assumption that if there are 3 morphospecies of a given arthrpod family in one room of a house, and 10 in another, all 3 of those prior species are redundant in the the 10 in the other room). The 'houses' file also has statistics about the characteristics of each house, such as how much and how diverse the ground cover and canopy cover on the property are, the size of the house, house value, and things going on at the neighborhood scale based on remote sensing and US census data.
+
+# Check for spatial autocorrelation 
+```{r autocorrelation}
+library(vegan)
+library(RColorBrewer)
+library(lme4)
+library(ggplot2)
+library(ade4)
+#mantel tests for spatial autocorrelations
+house.dists<-dist(cbind(aoh$lon, aoh$lat))
+fam.dists<-dist(aoh$numFam)
+income.dists<-dist(aoh$incomeAvg)
+gc.dists<-dist(aoh$groundCoverAvg)
+gd.dists<-dist(aoh$groundDivAvg)
+imp.dists<-dist(aoh$Imp500m)
+mantel.rtest(house.dists, imp.dists, nrepet=999)
+```
+
+
+
+## Analyses
+# Variable Selection
+We considered several biological, geophysical and socioeconomic variables at local and landscape scales that we hypothesized could influence indoor arthropod diversity (table 1), and scaled them from 0 to 1. We then created a correlation matrix with these initial 12 variables with R package corrplot [15] (electronic supplementary material, figure S1). We found some variables to be highly correlated with one another (Pearson's r > |0.5|), so restricted our analyses to seven factors that maximized coverage and questions of interest. On the landscape scale, we included remotely sensed canopy cover within a 100 m radius, remotely sensed impervious surface area within a 500 m radius, and mean neighbourhood income at the census block level. On the scale of each property's extent, we included house age, local ground vegetation diversity, local ground vegetation cover and local canopy cover. We suspected house square footage of being linked with sampling effort, so included it in the model to account for potential bias. 
+
+```{r corrplot}
+
+```
+
+
+# GLMs
+We then used R package glmulti, which does automated model selection with generalized linear models (GLMs) [16], to generate GLMs of all possible model combinations with a Poisson distribution (with house arthropod diversity as the response variable and the explanatory variables listed above) and automatically select the best model based on Akaike information criterion (AIC) and Bayes information criterion (BIC) scores. Then, with the most critical environmental variables identified, we tested for the effect of interactions among those that made biological sense.
+```{r glmulti}
+
+```
+
