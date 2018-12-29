@@ -51,6 +51,31 @@ summary(houses)
 
 The 'houses' file gives information on each (surprise surprise) house.  Rooms (the unique collecting events) have been collapsed to just the house level, so a conservative estimate of the number of arthropod families is listed for each house (the assumption that if there are 3 morphospecies of a given arthrpod family in one room of a house, and 10 in another, all 3 of those prior species are redundant in the the 10 in the other room). The 'houses' file also has statistics about the characteristics of each house, such as how much and how diverse the ground cover and canopy cover on the property are, the size of the house, house value, and things going on at the neighborhood scale based on remote sensing and US census data.
 
+
+# Make dataset more usable
+For some reason, the 'houses' file does not have lat/lon data which we need for the spatial autocorrelation analysis, and for some reason also does not have a houseID column.  A way to get around that is to find one of the overlapping variables that is unique for each house and use that as the linking factor.
+
+```{r linkData}
+# It seems like 2 of the houses somehow share the same variables.
+unique(aoh$Imp100m)
+
+# This is better!
+unique(aoh$Imp500m)
+
+# Cross reference with 'houses' file. Perfect.
+unique(houses$Imp500m)
+
+# Collapse 'aoh' file to only contain unique values for each house 
+aoh_collapsed <- aoh %>%
+  select (houseID, Imp500m, lat, lon) %>%
+  distinct()
+
+# Now link the two
+houses <- houses %>%
+  left_join(aoh_collapsed, by = "Imp500m")
+
+```
+
 # Check for spatial autocorrelation 
 ```{r autocorrelation}
 library(vegan)
@@ -59,12 +84,12 @@ library(lme4)
 library(ggplot2)
 library(ade4)
 #mantel tests for spatial autocorrelations
-house.dists<-dist(cbind(aoh$lon, aoh$lat))
-fam.dists<-dist(aoh$numFam)
-income.dists<-dist(aoh$incomeAvg)
-gc.dists<-dist(aoh$groundCoverAvg)
-gd.dists<-dist(aoh$groundDivAvg)
-imp.dists<-dist(aoh$Imp500m)
+house.dists<-dist(cbind(houses$lon, houses$lat))
+fam.dists<-dist(houses$numFam)
+income.dists<-dist(houses$incomeAvg)
+gc.dists<-dist(houses$groundCoverAvg)
+gd.dists<-dist(houses$groundDivAvg)
+imp.dists<-dist(houses$Imp500m)
 mantel.rtest(house.dists, imp.dists, nrepet=999)
 ```
 
