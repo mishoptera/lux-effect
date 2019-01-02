@@ -140,6 +140,53 @@ plot(numFam~Imp500m, data=aoh.scaled)
 # GLMs
 We then used R package glmulti, which does automated model selection with generalized linear models (GLMs) [16], to generate GLMs of all possible model combinations with a Poisson distribution (with house arthropod diversity as the response variable and the explanatory variables listed above) and automatically select the best model based on Akaike information criterion (AIC) and Bayes information criterion (BIC) scores. Then, with the most critical environmental variables identified, we tested for the effect of interactions among those that made biological sense.
 ```{r glmulti}
+#copy and pasted in
+## The super awesome glmulti
+library(glmulti)
+mALL<-glmulti(numFam~Can100m+Imp500m+houseAge+income+groundDiv+groundCover
+            +canopyCover+sqFeet, 
+           data=aoh.scaled, family="poisson", method="h", level=1, crit="aic")
+mRARE<-glmulti(numRARE~Can100m+Imp500m+houseAge+income+groundDiv+groundCover+canopyCover+sqFeet, 
+           data=aoh.scaled, family="poisson", method="h", level=1, crit="aic")
+m<-glmulti(propRARE~Can100m+Imp500m+houseAge+income+groundDiv+groundCover+canopyCover+sqFeet, 
+           data=aoh.scaled, family="binomial", method="h", level=1, crit="aic")
+m<-glmulti((propRAREscaled*100)~Can100m+Imp500m+houseAge+income+groundDiv+groundCover+canopyCover+sqFeet, 
+           data=aoh.scaled, family="poisson", method="h", level=1, crit="aic")
+mInterior<-glmulti(numFam~income+Imp500m+groundDiv+groundCover+clutter+plant+cat+dog+pesticide+sqFeet, 
+              data=aoh.scaled, family="poisson", method="h", level=1, crit="aic")
+summary(mALL)
+summary(mRARE)
+summary(mInterior)
+plot(mInterior, type="s")
+plot(mInterior, type="w")
+plot(m, type="s")
 
+coef(mInterior, select="all", varweighting="Buckland", icmethod="Lukacs", alphaIC=0.05)
+ 
+m<-glm(numFam~income+groundDiv+groundCover+income*groundCover+
+         sqFeet, 
+        data=aoh.scaled, family="poisson")
+m1<-glm(numFam~income+Imp500m+groundDiv+groundCover+cat+dog+sqFeet, 
+         data=aoh.scaled, family="poisson")
+summary(m)
+summary(m1)
+
+m2<-glm(numFam~Imp500m+income+groundCover+groundDiv+income*groundCover+sqFeet, 
+        data=aoh.scaled, family="poisson")
+summary(m2)## Groundcover and income have a strong interaction!  Let's plot that.
+m3<-glm(numFam~Imp500m+income+groundCover+groundDiv+cat+dog+income*groundCover+sqFeet, 
+        data=aoh.scaled, family="poisson")
+summary(m3)
+m3<-glm(numFam~Imp500m+income+groundCover+groundDiv+cat+dog+sqFeet, 
+        data=aoh.scaled, family="poisson")
+summary(m3)
+
+# PLOTTING
+aoh.scaled$gcCat<-factor(aoh.scaled$gcCat, levels=c("Low", "Med", "High"))
+c<-ggplot(aoh.scaled, aes(y=numFam, x=income, colour=gcCat))
+c+ stat_smooth(method=lm, se=FALSE)+geom_point()+scale_x_continuous(labels=scales::dollar)+
+  labs(y="Number of arthropod families", x="Average neighborhood income", colour="Ground cover")+
+  theme_bw(base_size=30)
+  
 ```
 
