@@ -140,7 +140,7 @@ plot(numFam~Imp500m, data=aoh.scaled)
 # GLMs
 We then used R package glmulti, which does automated model selection with generalized linear models (GLMs) [16], to generate GLMs of all possible model combinations with a Poisson distribution (with house arthropod diversity as the response variable and the explanatory variables listed above) and automatically select the best model based on Akaike information criterion (AIC) and Bayes information criterion (BIC) scores. Then, with the most critical environmental variables identified, we tested for the effect of interactions among those that made biological sense.
 ```{r glmulti}
-#copy and pasted in
+#copy and pasted in. need to also get rJava
 ## The super awesome glmulti
 library(glmulti)
 mALL<-glmulti(numFam~Can100m+Imp500m+houseAge+income+groundDiv+groundCover
