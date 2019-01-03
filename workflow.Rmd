@@ -163,6 +163,10 @@ plot(m, type="s")
 
 coef(mInterior, select="all", varweighting="Buckland", icmethod="Lukacs", alphaIC=0.05)
  
+
+```
+ Interaction
+```{r}
 m<-glm(numFam~income+groundDiv+groundCover+income*groundCover+
          sqFeet, 
         data=aoh.scaled, family="poisson")
@@ -181,6 +185,14 @@ m3<-glm(numFam~Imp500m+income+groundCover+groundDiv+cat+dog+sqFeet,
         data=aoh.scaled, family="poisson")
 summary(m3)
 
+
+```
+ 
+ 
+ 
+ ## PLOTS
+ Interaction plot
+```{r interaction}
 # PLOTTING
 aoh.scaled$gcCat<-factor(aoh.scaled$gcCat, levels=c("Low", "Med", "High"))
 c<-ggplot(aoh.scaled, aes(y=numFam, x=income, colour=gcCat))
@@ -189,4 +201,4 @@ c+ stat_smooth(method=lm, se=FALSE)+geom_point()+scale_x_continuous(labels=scale
   theme_bw(base_size=30)
   
 ```
-
+ 
