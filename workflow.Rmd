@@ -119,7 +119,7 @@ veg<-range01(houses$vegAvg)
                        
 aoh.scaled<-data.frame(numFam=houses$numFam, Imp100m, Can100m, Imp500m, Can500m, 
                        income, houseAge, totalValue, canopyDiv, groundDiv, groundCover,
-                       canopyCover, veg, houses$sqFeet)
+                       canopyCover, veg, sqFeet = houses$sqFeet)
 
 # correlation matrix (delete gcCat from above)
 library(corrplot)
@@ -171,7 +171,7 @@ coef(mInterior, select="all", varweighting="Buckland", icmethod="Lukacs", alphaI
 m<-glm(numFam~income+groundDiv+groundCover+income*groundCover+
          sqFeet, 
         data=aoh.scaled, family="poisson")
-m1<-glm(numFam~income+Imp500m+groundDiv+groundCover+cat+dog+sqFeet, 
+m1<-glm(numFam~income+Imp500m+groundDiv+groundCover+sqFeet, 
          data=aoh.scaled, family="poisson")
 summary(m)
 summary(m1)
