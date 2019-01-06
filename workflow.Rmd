@@ -195,8 +195,12 @@ summary(m3)
  Interaction plot
 ```{r interaction}
 # PLOTTING
-aoh.scaled$gcCat<-factor(aoh.scaled$gcCat, levels=c("Low", "Med", "High"))
-c<-ggplot(aoh.scaled, aes(y=numFam, x=income, colour=gcCat))
+aoh.enhanced <- aoh.scaled %>%
+  mutate (gcCat = ifelse (groundCover < 0.3, "Low",
+                     ifelse (groundCover > 0.7, "High",
+                         "Med")))
+aoh.enhanced$gcCat<-factor(aoh.enhanced$gcCat, levels=c("Low", "Med", "High"))
+c<-ggplot(aoh.enhanced, aes(y=numFam, x=income, colour=gcCat))
 c+ stat_smooth(method=lm, se=FALSE)+geom_point()+scale_x_continuous(labels=scales::dollar)+
   labs(y="Number of arthropod families", x="Average neighborhood income", colour="Ground cover")+
   theme_bw(base_size=30)
